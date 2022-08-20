@@ -153,6 +153,7 @@ const Books = () => {
                 book={{
                   ..._book,
                 }}
+                key={_book.id}
                 buy={buy}
                 editPrice={editPrice}
                 editDescription={editDescription}
