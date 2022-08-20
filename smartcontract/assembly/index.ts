@@ -46,6 +46,7 @@ export function addMoreBook(bookId: string, amount: u32): void {
     if(liked != null){
       assert(liked.indexOf(bookId) == -1,"You have already liked this book");
       liked.push(bookId);
+      likedStorage.set(context.sender,liked);
     }else{
       likedStorage.set(context.sender,[bookId]);
     }
