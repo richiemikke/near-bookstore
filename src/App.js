@@ -42,7 +42,7 @@ const App = function AppWrapper() {
           </main>
         </Container>
       ) : (
-        <Cover name="Near Bookstore Dapp" login={login} coverImg="https://cdn.techinasia.com/wp-content/uploads/2016/12/resized-750x545.jpg" />
+        <Cover name="Near Bookstore Dapp" login={login} coverImg="https://s2982.pcdn.co/wp-content/uploads/2021/09/bookstore-shelves-hero-image.jpg.optimal.jpg" />
       )}
     </>
   );
