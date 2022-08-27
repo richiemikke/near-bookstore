@@ -1,4 +1,4 @@
-import { Book, booksStorage } from './model';
+import {Book, booksStorage, userBuyStorage, UserBuy} from './model';
 import { context, ContractPromiseBatch, u128 } from "near-sdk-as";
 
 
@@ -19,6 +19,26 @@ export function buyBook(bookId: string): void {
     book.incrementSoldAmount();
     book.decreaseAvailableAmount();
     booksStorage.set(book.id, book);
+
+    let userBuy = userBuyStorage.get(context.sender);
+
+    if(userBuy == null){
+        userBuy = [];
+        userBuy.push(UserBuy.init(bookId));
+    } else {
+        const bookBuyIndex = userBuy.findIndex((el: UserBuy)=> el.bookId == bookId);
+
+        if(bookBuyIndex < 0){
+            userBuy.push(UserBuy.init(bookId));
+        } else {
+            let bookBuy = userBuy[bookBuyIndex];
+            bookBuy.increaseBoughtQuantity();
+            userBuy.splice(bookBuyIndex, 1);
+            userBuy.push(bookBuy);
+        }
+    }
+
+    userBuyStorage.set(context.sender, userBuy);
 }
 
 /* adding more available books to the marketplace */
@@ -101,4 +121,18 @@ export function getBook(id: string): Book | null {
  */
 export function getBooks(): Array<Book> {
     return booksStorage.values();
+}
+
+
+/**
+ * Get the details of the books that a given user bought
+ * @param accountId ID of the user
+ * @return Array of UserBuy objects
+ */
+export function getUserBuys(accountId: string): Array<UserBuy> {
+    let userBuys = userBuyStorage.get(accountId);
+    if(userBuys == null){
+        return [];
+    }
+    return userBuys;
 }
