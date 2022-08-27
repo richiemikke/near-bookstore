@@ -56,6 +56,25 @@ export class Book {
     }
 }
 
+@nearBindgen
+export class UserBuy {
+    bookId: string;
+    quantity: u32;
 
+    public static init(bookId: string) : UserBuy {
+        const userBuy = new UserBuy();
+
+        userBuy.bookId = bookId;
+        userBuy.quantity = 1;
+
+        return userBuy;
+    }
+
+    public increaseBoughtQuantity() : void {
+        this.quantity++;
+    }
+}
 
 export const booksStorage = new PersistentUnorderedMap<string, Book>("LISTED_BOOKS");
+
+export const userBuyStorage = new PersistentUnorderedMap<string, UserBuy[]>("LISTED_BUYS");
