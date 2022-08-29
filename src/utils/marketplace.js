@@ -12,11 +12,12 @@ export function createBook(book) {
 
 export function addAvailableBook(Id, _ammount) {
   const ammount_ =  parseInt(_ammount);
-  return window.contract.addMoreBook({ bookId: Id, ammount: ammount_ }, GAS );
+  return window.contract.addMoreBook({ bookId: Id, amount: ammount_ }, GAS );
 }
 
 export function changePrice( Id, _price ) {
-  return window.contract.editPrice( { bookId: Id, newPrice: _price }, GAS );
+  const price = parseNearAmount(_price + "");
+  return window.contract.editPrice( { bookId: Id, newPrice: price }, GAS );
 }
 
 export function likeBook( Id ) {
