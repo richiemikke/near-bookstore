@@ -1,9 +1,9 @@
-import { PersistentUnorderedMap, context, PersistentMap, u128 } from "near-sdk-as";
+import { PersistentUnorderedMap, context, u128 } from "near-sdk-as";
 
 /**
- * This class represents a product that can be listed on a marketplace.
- * It contains basic properties that are needed to define a product.
- * The price of the product is of type u128 that allows storing it in yocto-NEAR, where `1 yocto = 1^-24`.
+ * This class represents a book that can be listed on a marketplace.
+ * It contains basic properties that are needed to define a book.
+ * The price of the book is of type u128 that allows storing it in yocto-NEAR, where `1 yocto = 1^-24`.
  * {@link nearBindgen} - it's a decorator that makes this class serializable so it can be persisted on the blockchain level. 
  */
 @nearBindgen
@@ -34,17 +34,15 @@ export class Book {
     }
     public incrementSoldAmount(): void {
         this.sold = this.sold + 1;
+        this.available = this.available - 1;
     }
 
     public incrementLikes(): void {
         this.likes = this.likes + 1;
     }
-    public decreaseAvailableAmount(): void {
-        this.available = this.available - 1;
-    }
 
-    public addAmount(number: u32 = 1): void {
-        this.available = this.available + number;
+    public addAmount(amount: u32 = 1): void {
+        this.available = this.available + amount;
     }
 
     public changeDescription(newDescrption: string): void {
@@ -55,7 +53,6 @@ export class Book {
         this.price = newPrice;
     }
 }
-
-
+export const likedStorage = new PersistentUnorderedMap<string, string[]>("LIKED_BOOKS");
 
 export const booksStorage = new PersistentUnorderedMap<string, Book>("LISTED_BOOKS");
